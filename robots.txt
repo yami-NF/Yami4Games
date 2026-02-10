@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://yami-nf.github.io/YamiAppStore/sitemap.xml
+Sitemap: https://yami-nf.github.io/Yami4Games/sitemap.xml
