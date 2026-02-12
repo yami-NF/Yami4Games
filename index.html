@@ -102,12 +102,22 @@
       overflow:hidden;
       background: #081216;
       border-radius:12px;
+      -webkit-backface-visibility:hidden;
+      backface-visibility:hidden;
+      -webkit-perspective:1000;
+      perspective:1000;
     }
     .slides{
       display:flex;
       height:100%;
       transition: transform var(--transition);
       will-change: transform;
+      -webkit-backface-visibility:hidden;
+      backface-visibility:hidden;
+      -webkit-perspective:1000;
+      perspective:1000;
+      -webkit-transform-origin:0 0;
+      transform-origin:0 0;
     }
     .slide{
       min-width:100%;
@@ -121,6 +131,8 @@
       background-position:center;
       background-repeat:no-repeat;
       opacity:1;
+      -webkit-backface-visibility:hidden;
+      backface-visibility:hidden;
     }
 
     .slide img{
@@ -138,12 +150,16 @@
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
       transform: translateZ(0);
+      -webkit-transform: translateZ(0);
       image-rendering: auto;
       max-width:100%;
+      -webkit-user-select: none;
+      user-select: none;
     }
     .slide img.touch-active{
       filter: blur(0px);
       transform: scale(1.06);
+      -webkit-transform: scale(1.06);
     }
     .slide::after{
       content:"";
@@ -483,14 +499,14 @@
           <div class="meta-small">File size: 209.2 MB</div>
         </article>
 
-        <article class="card" role="listitem" aria-label="No I’m Not a Human">
-          <h3>No I’m Not a Human</h3>
+        <article class="card" role="listitem" aria-label="No I'm Not a Human">
+          <h3>No I'm Not a Human</h3>
           <div class="icon" aria-hidden="true">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuczXt1K9lycQojQ4LXvGqPvsxAE-x_MgoGA&s" alt="No I’m Not a Human">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuczXt1K9lycQojQ4LXvGqPvsxAE-x_MgoGA&s" alt="No I'm Not a Human">
           </div>
-          <button class="download" aria-label="Download No I’m Not a Human"
+          <button class="download" aria-label="Download No I'm Not a Human"
             data-href="https://installyourfiles.com/1867629"
-            data-role="game" data-name="No I’m Not a Human" data-category="Adventure" data-mod="false">Download</button>
+            data-role="game" data-name="No I'm Not a Human" data-category="Adventure" data-mod="false">Download</button>
           <div class="meta-small">File size: 777.5 MB</div>
         </article>
 
@@ -606,6 +622,7 @@
         };
       }
 
+      // Download handler preserved (silent redirect)
       document.addEventListener('click', function (e) {
         var btn = e.target.closest('button.download');
         if (!btn) return;
@@ -635,6 +652,7 @@
         } catch (err) { /* silent */ }
       };
 
+      // Slider logic (unchanged behavior) — uses slides present in DOM
       var slidesEl = document.getElementById('slides');
       var slides = Array.from(slidesEl.querySelectorAll('.slide'));
       var dots = Array.from(document.querySelectorAll('.dot'));
@@ -740,6 +758,7 @@
 
       window.YamiSlider = { goTo, next, prev, start: startAuto, stop: stopAuto, currentIndex: function(){ return current; } };
 
+      // Rebranded global API name (backwards-compatible: keep old _KB behavior)
       window.Yami4Games = {
         triggerDownload: function (payload) {
           if (payload && payload.dataset) { window._KB(payload); return; }
@@ -747,11 +766,17 @@
         }
       };
 
-
+      // ----------------------
+      // Search filtering (minimal, non-invasive)
+      // - dynamically filters games in the "Games" section
+      // - case-insensitive, instant, no page reload
+      // - does not change card structure
+      // ----------------------
       (function setupGamesSearch() {
         var input = document.getElementById('gamesSearchInput');
         if (!input) return;
 
+        // Find the games section by the games-heading id (no structural changes)
         var gamesHeading = document.getElementById('games-heading');
         if (!gamesHeading) return;
         var gamesSection = gamesHeading.closest('section');
@@ -759,12 +784,14 @@
         var list = gamesSection.querySelector('.list');
         if (!list) return;
 
+        // Collect all game cards (live NodeList)
         var cards = Array.from(list.querySelectorAll('article.card'));
 
         function normalize(s) { return (s || '').toString().trim().toLowerCase(); }
 
         function filterOnce() {
           var q = normalize(input.value);
+          // If empty, show all
           if (!q) {
             cards.forEach(function(c){ c.style.display = ''; });
             return;
@@ -780,10 +807,11 @@
           });
         }
 
+        // Simple input event, immediate results
         input.addEventListener('input', filterOnce, { passive: true });
 
-
-        input.addEventListener('search', filterOnce);
+        // On mobile, keep focus behavior friendly
+        input.addEventListener('search', filterOnce); // supports clearing on some browsers
       })();
     })();
   </script>
