@@ -9,7 +9,7 @@
   <meta name="keywords" content="Android games download, iOS games download, free mobile games, download Android apps, iPhone apps download, APK games, mobile games free">
   <meta name="theme-color" content="#091015" />
   <link rel="canonical" href="https://example.com/" />
-  <meta property="og:title" content="Yami4Games — Exclusive Android Games" />
+  <meta property="og:title" content="Yami4Games �� Exclusive Android Games" />
   <meta property="og:description" content="Download the best Android and ios games and apps for free. Fast, safe and easy downloads on Yami4Games" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -111,6 +111,7 @@
       display:flex;
       height:100%;
       transition: transform var(--transition);
+      -webkit-transition: -webkit-transform var(--transition);
       will-change: transform;
       -webkit-backface-visibility:hidden;
       backface-visibility:hidden;
@@ -118,12 +119,15 @@
       perspective:1000;
       -webkit-transform-origin:0 0;
       transform-origin:0 0;
+      -webkit-transform-style:preserve-3d;
+      transform-style:preserve-3d;
     }
     .slide{
-      min-width:100%;
+      /* Use a fixed flex-basis and explicit width to avoid iOS percent/flex rounding issues */
+      flex: 0 0 100%;
+      width: 100%;
       height:100%;
       position:relative;
-      flex-shrink:0;
       display:flex;
       align-items:center;
       justify-content:center;
@@ -133,6 +137,9 @@
       opacity:1;
       -webkit-backface-visibility:hidden;
       backface-visibility:hidden;
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      box-sizing: border-box;
     }
 
     .slide img{
@@ -652,11 +659,12 @@
         } catch (err) { /* silent */ }
       };
 
-      // Slider logic (unchanged behavior) — uses slides present in DOM
+      // Slider logic (iOS compatibility fixes)
       var slidesEl = document.getElementById('slides');
       var slides = Array.from(slidesEl.querySelectorAll('.slide'));
       var dots = Array.from(document.querySelectorAll('.dot'));
       var sliderEl = document.getElementById('heroSlider');
+      var viewportEl = sliderEl.querySelector('.viewport');
 
       var current = 0;
       var max = slides.length;
@@ -664,8 +672,21 @@
       var autoTimer = null;
       var isTouch = false;
 
+      // Utility: get viewport width in pixels (use offsetWidth to avoid fractional-percent issues on iOS)
+      function getViewportWidth() {
+        return Math.max(0, viewportEl && viewportEl.clientWidth ? viewportEl.clientWidth : (slidesEl.clientWidth || window.innerWidth));
+      }
+
+      // Update slider position using pixel-based translate3d for iOS rendering stability
       function updateSliderPosition() {
-        slidesEl.style.transform = 'translateX(' + (-current * 100) + '%)';
+        var vw = getViewportWidth();
+        // Use translate3d in pixels: more robust on iOS (avoids rounding/percent issues)
+        var tx = -current * vw;
+        var transformValue = 'translate3d(' + tx + 'px, 0, 0)';
+        slidesEl.style.transform = transformValue;
+        slidesEl.style.webkitTransform = transformValue;
+
+        // Ensure aria-hidden and active dot
         slides.forEach((s, i) => s.setAttribute('aria-hidden', i === current ? 'false' : 'true'));
         dots.forEach((d, i) => d.classList.toggle('active', i === current));
       }
@@ -753,6 +774,19 @@
         }, { passive: true });
       })();
 
+      // Recalculate layout on resize/orientation change to avoid partial slides on iOS
+      var resizeTimeout = null;
+      function handleResize() {
+        // Debounce a little
+        if (resizeTimeout) clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function(){
+          updateSliderPosition();
+        }, 80);
+      }
+      window.addEventListener('resize', handleResize);
+      window.addEventListener('orientationchange', handleResize);
+
+      // Initial setup
       updateSliderPosition();
       startAuto();
 
@@ -768,9 +802,6 @@
 
       // ----------------------
       // Search filtering (minimal, non-invasive)
-      // - dynamically filters games in the "Games" section
-      // - case-insensitive, instant, no page reload
-      // - does not change card structure
       // ----------------------
       (function setupGamesSearch() {
         var input = document.getElementById('gamesSearchInput');
