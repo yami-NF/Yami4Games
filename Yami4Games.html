@@ -102,12 +102,22 @@
       overflow:hidden;
       background: #081216;
       border-radius:12px;
+      -webkit-backface-visibility:hidden;
+      backface-visibility:hidden;
+      -webkit-perspective:1000;
+      perspective:1000;
     }
     .slides{
       display:flex;
       height:100%;
       transition: transform var(--transition);
       will-change: transform;
+      -webkit-backface-visibility:hidden;
+      backface-visibility:hidden;
+      -webkit-perspective:1000;
+      perspective:1000;
+      -webkit-transform-origin:0 0;
+      transform-origin:0 0;
     }
     .slide{
       min-width:100%;
@@ -121,6 +131,8 @@
       background-position:center;
       background-repeat:no-repeat;
       opacity:1;
+      -webkit-backface-visibility:hidden;
+      backface-visibility:hidden;
     }
 
     .slide img{
@@ -138,12 +150,16 @@
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
       transform: translateZ(0);
+      -webkit-transform: translateZ(0);
       image-rendering: auto;
       max-width:100%;
+      -webkit-user-select: none;
+      user-select: none;
     }
     .slide img.touch-active{
       filter: blur(0px);
       transform: scale(1.06);
+      -webkit-transform: scale(1.06);
     }
     .slide::after{
       content:"";
@@ -483,14 +499,14 @@
           <div class="meta-small">File size: 209.2 MB</div>
         </article>
 
-        <article class="card" role="listitem" aria-label="No I’m Not a Human">
-          <h3>No I’m Not a Human</h3>
+        <article class="card" role="listitem" aria-label="No I'm Not a Human">
+          <h3>No I'm Not a Human</h3>
           <div class="icon" aria-hidden="true">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuczXt1K9lycQojQ4LXvGqPvsxAE-x_MgoGA&s" alt="No I’m Not a Human">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuczXt1K9lycQojQ4LXvGqPvsxAE-x_MgoGA&s" alt="No I'm Not a Human">
           </div>
-          <button class="download" aria-label="Download No I’m Not a Human"
+          <button class="download" aria-label="Download No I'm Not a Human"
             data-href="https://installyourfiles.com/1867629"
-            data-role="game" data-name="No I’m Not a Human" data-category="Adventure" data-mod="false">Download</button>
+            data-role="game" data-name="No I'm Not a Human" data-category="Adventure" data-mod="false">Download</button>
           <div class="meta-small">File size: 777.5 MB</div>
         </article>
 
