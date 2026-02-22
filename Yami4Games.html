@@ -516,6 +516,478 @@
       animation: yami-blur-to-clear 4s linear both;
       will-change: filter;
     }
+
+    /* =============================================
+       DOWNLOAD PAGE — APP STORE STYLE
+    ============================================= */
+    #downloadPage {
+      display: none;
+      min-height: 100vh;
+      background: var(--page-bg);
+    }
+
+    #downloadPage.visible {
+      display: block;
+      animation: dp-page-in 0.4s cubic-bezier(.2, .9, .2, 1) both;
+    }
+
+    @keyframes dp-page-in {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ---- Nav bar (back button row, replaces old absolute back-in-hero) ---- */
+    .dp-nav-bar {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      background: var(--page-bg);
+    }
+
+    /* back button */
+    .dp-back {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      color: #f6f7f9;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 14px 6px 10px;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .dp-back:hover {
+      background: rgba(0, 224, 184, 0.15);
+      border-color: rgba(0, 224, 184, 0.4);
+    }
+
+    /* ---- Body content ---- */
+    .dp-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+      padding: 22px 20px 48px;
+      text-align: center;
+    }
+
+    /* App mode — no banner, extra top breathing room */
+    #downloadPage.dp-app-mode .dp-body {
+      padding-top: 10px;
+    }
+
+    /* Avatar banner — games only */
+    .dp-avatar-banner {
+      position: relative;
+      width: 100%;
+      height: 300px;
+      overflow: hidden;
+      background: #0a1520;
+      display: none;
+    }
+
+    .dp-avatar-banner.visible {
+      display: block;
+    }
+
+    .dp-avatar-banner-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      opacity: 0;
+      transition: opacity 0.55s ease;
+      will-change: opacity;
+    }
+
+    .dp-avatar-banner-img.loaded {
+      opacity: 1;
+    }
+
+    /* dark gradient overlay */
+    .dp-avatar-banner::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg,
+          rgba(9, 16, 21, 0.10) 0%,
+          rgba(9, 16, 21, 0.30) 55%,
+          rgba(9, 16, 21, 0.82) 100%);
+      pointer-events: none;
+    }
+
+    @media (max-width: 480px) {
+      .dp-avatar-banner {
+        height: 200px;
+      }
+    }
+
+    /* ---- Game icon (logo) floating below avatar banner ---- */
+    .dp-icon-wrap {
+      display: flex;
+      justify-content: center;
+      margin-top: -46px;
+      position: relative;
+      z-index: 5;
+    }
+
+    /* For apps: no banner above, so no negative margin */
+    #downloadPage.dp-app-mode .dp-icon-wrap {
+      margin-top: 0;
+      padding-top: 18px;
+    }
+
+    .dp-icon {
+      width: 96px;
+      height: 96px;
+      border-radius: 22px;
+      border: 3px solid var(--page-bg);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.06);
+      overflow: hidden;
+      background: #0f1316;
+      flex-shrink: 0;
+      transition: transform 0.3s cubic-bezier(.2, .9, .2, 1), box-shadow 0.3s ease;
+    }
+
+    .dp-icon:hover {
+      transform: translateY(-3px) scale(1.04);
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(0, 224, 184, 0.2);
+    }
+
+    .dp-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ---- Language dropdown ---- */
+    .dp-lang-wrap {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dp-lang-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      color: #f6f7f9;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 8px 14px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      -webkit-tap-highlight-color: transparent;
+      white-space: nowrap;
+    }
+
+    .dp-lang-trigger:hover {
+      background: rgba(0, 224, 184, 0.06);
+      border-color: rgba(0, 224, 184, 0.35);
+    }
+
+    .dp-lang-trigger .dp-arrow {
+      width: 14px;
+      height: 14px;
+      opacity: 0.55;
+      transition: transform 0.22s ease;
+      flex-shrink: 0;
+    }
+
+    .dp-lang-wrap.open .dp-lang-trigger {
+      border-color: rgba(0, 224, 184, 0.45);
+      background: rgba(0, 224, 184, 0.07);
+    }
+
+    .dp-lang-wrap.open .dp-arrow {
+      transform: rotate(180deg);
+    }
+
+    .dp-lang-dropdown {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%) scaleY(0.85);
+      transform-origin: top center;
+      min-width: 160px;
+      background: #141a1f;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.55);
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s cubic-bezier(.2, .9, .2, 1);
+      z-index: 50;
+    }
+
+    .dp-lang-wrap.open .dp-lang-dropdown {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) scaleY(1);
+    }
+
+    .dp-lang-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .dp-lang-option:hover {
+      background: rgba(0, 224, 184, 0.07);
+      color: #f6f7f9;
+    }
+
+    .dp-lang-option.selected {
+      color: #00e0b8;
+      background: rgba(0, 224, 184, 0.06);
+    }
+
+    .dp-lang-option .dp-check {
+      margin-left: auto;
+      width: 14px;
+      height: 14px;
+      color: #00e0b8;
+      opacity: 0;
+      flex-shrink: 0;
+    }
+
+    .dp-lang-option.selected .dp-check {
+      opacity: 1;
+    }
+
+    .dp-lang-option+.dp-lang-option {
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    /* ---- Game info ---- */
+    .dp-info-block {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .dp-game-title {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      margin: 0;
+      color: #f6f7f9;
+      line-height: 1.2;
+    }
+
+    .dp-game-version {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 0;
+      letter-spacing: 0.3px;
+    }
+
+    .dp-game-desc {
+      font-size: 13px;
+      color: rgba(154, 164, 173, 0.75);
+      margin: 4px 0 0;
+      max-width: 300px;
+      line-height: 1.55;
+    }
+
+    /* ---- Stat chips ---- */
+    .dp-stats {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .dp-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 10px;
+      padding: 10px 18px;
+      min-width: 72px;
+    }
+
+    .dp-stat-val {
+      font-size: 15px;
+      font-weight: 700;
+      color: #00e0b8;
+    }
+
+    .dp-stat-lbl {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    /* ---- Platform buttons ---- */
+    .dp-platform-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      max-width: 340px;
+    }
+
+    .dp-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 15px 24px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.26s cubic-bezier(.2, .9, .2, 1), box-shadow 0.26s ease, filter 0.26s ease;
+      -webkit-tap-highlight-color: transparent;
+      position: relative;
+      overflow: hidden;
+      letter-spacing: 0.25px;
+      width: 100%;
+    }
+
+    .dp-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .dp-btn:hover {
+      transform: translateY(-3px);
+      filter: brightness(1.08);
+    }
+
+    .dp-btn:active {
+      transform: translateY(1px);
+      filter: brightness(0.95);
+    }
+
+    .dp-btn-android {
+      background: linear-gradient(145deg, #00e0b8, #00b894);
+      color: #04110e;
+      box-shadow: 0 8px 22px rgba(0, 224, 184, 0.32);
+    }
+
+    .dp-btn-android:hover {
+      box-shadow: 0 14px 32px rgba(0, 224, 184, 0.48);
+    }
+
+    .dp-btn-ios {
+      background: linear-gradient(145deg, #1a2230, #131b26);
+      color: #f6f7f9;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4);
+    }
+
+    .dp-btn-ios:hover {
+      border-color: rgba(255, 255, 255, 0.28);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.55);
+    }
+
+    /* ---- Trust strip ---- */
+    .dp-trust {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: var(--muted);
+      opacity: 0.6;
+    }
+
+    .dp-trust span {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* ---- Redirect overlay ---- */
+    #dpRedirectOverlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: rgba(9, 16, 21, 0.94);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      text-align: center;
+      padding: 24px;
+    }
+
+    #dpRedirectOverlay.show {
+      display: flex;
+      animation: dp-page-in 0.3s ease both;
+    }
+
+    .dp-spinner {
+      width: 48px;
+      height: 48px;
+      border: 3px solid rgba(0, 224, 184, 0.15);
+      border-top-color: #00e0b8;
+      border-radius: 50%;
+      animation: dp-spin 0.85s linear infinite;
+    }
+
+    @keyframes dp-spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .dp-redirect-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #f6f7f9;
+      margin: 0;
+    }
+
+    .dp-redirect-msg {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 0;
+      max-width: 280px;
+      line-height: 1.5;
+    }
   </style>
 </head>
 
@@ -774,6 +1246,148 @@
     </footer>
   </div>
 
+  <!-- ============================================
+       DOWNLOAD DETAILS PAGE — APP STORE STYLE
+  ============================================= -->
+  <div id="downloadPage" role="region" aria-label="Download Details">
+
+    <!-- Nav bar with back button -->
+    <div class="dp-nav-bar">
+      <button class="dp-back" id="dpBackBtn" aria-label="Back to home">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M19 12H5M5 12l7 7M5 12l7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+        <span data-i18n="back">Back</span>
+      </button>
+    </div>
+
+    <!-- Game Avatar Banner (shown for games only) -->
+    <div class="dp-avatar-banner" id="dpAvatarBanner" aria-hidden="true">
+      <img id="dpAvatarBannerImg" class="dp-avatar-banner-img" src="" alt="" loading="lazy" aria-hidden="true">
+    </div>
+
+    <!-- Game / App icon (logo) -->
+    <div class="dp-icon-wrap">
+      <div class="dp-icon">
+        <img id="dpAvatarImg" src="" alt="">
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="dp-body">
+
+      <!-- Language dropdown -->
+      <div class="dp-lang-wrap" id="dpLangWrap">
+        <button class="dp-lang-trigger" id="dpLangTrigger" aria-haspopup="listbox" aria-expanded="false">
+          <span id="dpLangFlag">🇺🇸</span>
+          <span id="dpLangLabel">English</span>
+          <svg class="dp-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </button>
+        <div class="dp-lang-dropdown" role="listbox" id="dpLangDropdown">
+          <button class="dp-lang-option selected" data-lang="en" data-flag="🇺🇸" data-label="English" role="option"
+            aria-selected="true">
+            🇺🇸&nbsp; English
+            <svg class="dp-check" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </button>
+          <button class="dp-lang-option" data-lang="es" data-flag="🇪🇸" data-label="Español" role="option"
+            aria-selected="false">
+            🇪🇸&nbsp; Español
+            <svg class="dp-check" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </button>
+          <button class="dp-lang-option" data-lang="fr" data-flag="🇫🇷" data-label="Français" role="option"
+            aria-selected="false">
+            🇫🇷&nbsp; Français
+            <svg class="dp-check" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </button>
+          <button class="dp-lang-option" data-lang="de" data-flag="🇩🇪" data-label="Deutsch" role="option"
+            aria-selected="false">
+            🇩🇪&nbsp; Deutsch
+            <svg class="dp-check" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Game Info -->
+      <div class="dp-info-block">
+        <h2 class="dp-game-title" id="dpGameTitle">Game Name</h2>
+        <p class="dp-game-version" id="dpGameVersion">
+          <span data-i18n="version">Version</span> <span id="dpVersionNum">1.0.0</span>
+        </p>
+        <p class="dp-game-desc" data-i18n="gameDesc">Free to download · Safe &amp; verified by Yami4Games.</p>
+      </div>
+
+      <!-- Stats chips -->
+      <div class="dp-stats">
+        <div class="dp-stat">
+          <span class="dp-stat-val">4.8 ★</span>
+          <span class="dp-stat-lbl" data-i18n="statRating">Rating</span>
+        </div>
+        <div class="dp-stat">
+          <span class="dp-stat-val" id="dpStatSize">—</span>
+          <span class="dp-stat-lbl" data-i18n="statSize">Size</span>
+        </div>
+        <div class="dp-stat">
+          <span class="dp-stat-val">Free</span>
+          <span class="dp-stat-lbl" data-i18n="statPrice">Price</span>
+        </div>
+      </div>
+
+      <!-- Platform Buttons -->
+      <div class="dp-platform-buttons">
+        <button class="dp-btn dp-btn-android" id="dpAndroidBtn" aria-label="Download for Android">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path
+              d="M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V8H6v10zm-2.5-1C2.67 17 2 17.67 2 18.5v-9C2 8.67 2.67 8 3.5 8S5 8.67 5 9.5v9c0 .83-.67 1.5-1.5 1.5zm17 0c-.83 0-1.5-.67-1.5-1.5v-9c0-.83.67-1.5 1.5-1.5S23 8.67 23 9.5v9c0 .83-.67 1.5-1.5 1.5zM8.5 3.53L7.4 2.43c-.19-.19-.19-.51 0-.7.19-.19.51-.19.7 0l1.27 1.27C9.95 2.73 10.95 2.5 12 2.5s2.05.23 2.63.5L15.9 1.73c.19-.19.51-.19.7 0 .19.19.19.51 0 .7L15.5 3.53C16.96 4.39 18 5.82 18 7.5H6C6 5.82 7.04 4.39 8.5 3.53zM10 6h-.5c-.28 0-.5-.22-.5-.5S9.22 5 9.5 5s.5.22.5.5V6zm5 0h-.5v-.5c0-.28.22-.5.5-.5s.5.22.5.5-.22.5-.5.5z" />
+          </svg>
+          <span data-i18n="downloadAndroid">Download for Android</span>
+        </button>
+        <button class="dp-btn dp-btn-ios" id="dpIosBtn" aria-label="Download for iOS">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path
+              d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
+          </svg>
+          <span data-i18n="downloadIos">Download for iOS</span>
+        </button>
+      </div>
+
+      <!-- Trust strip -->
+      <div class="dp-trust">
+        <span>🔒 <span data-i18n="secure">Secure</span></span>
+        <span>✅ <span data-i18n="verified">Verified</span></span>
+        <span>⚡ <span data-i18n="fast">Fast Download</span></span>
+      </div>
+
+      <!-- Download page footer copyright -->
+      <p style="margin:32px 0 0;font-size:11px;color:var(--muted);opacity:0.55;text-align:center;user-select:none;">©
+        Yami4Games. All rights reserved.</p>
+
+    </div>
+  </div>
+
+  <!-- Redirect overlay -->
+  <div id="dpRedirectOverlay" role="status" aria-live="polite">
+    <div class="dp-spinner" aria-hidden="true"></div>
+    <p class="dp-redirect-title" data-i18n="redirecting">Preparing your download…</p>
+    <p class="dp-redirect-msg" data-i18n="redirectMsg">You are being redirected to a secure download page. Please wait a
+      moment.</p>
+  </div>
+
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -811,26 +1425,216 @@
         };
       }
 
-      // Download handler preserved (silent redirect)
+      // =============================================
+      // DOWNLOAD PAGE LOGIC — APP STORE STYLE
+      // =============================================
+      var currentDownloadHref = null;
+      var currentLang = 'en';
+
+      var translations = {
+        en: { back: 'Back', version: 'Version', gameDesc: 'Free to download · Safe & verified by Yami4Games.', downloadAndroid: 'Download for Android', downloadIos: 'Download for iOS', secure: 'Secure', verified: 'Verified', fast: 'Fast Download', statRating: 'Rating', statSize: 'Size', statPrice: 'Price', redirecting: 'Preparing your download\u2026', redirectMsg: 'You are being redirected to a secure download page. Please wait a moment.' },
+        es: { back: 'Atrás', version: 'Versión', gameDesc: 'Gratis · Seguro y verificado por Yami4Games.', downloadAndroid: 'Descargar para Android', downloadIos: 'Descargar para iOS', secure: 'Seguro', verified: 'Verificado', fast: 'Descarga Rápida', statRating: 'Puntuación', statSize: 'Tamaño', statPrice: 'Precio', redirecting: 'Preparando tu descarga\u2026', redirectMsg: 'Estás siendo redirigido a una página de descarga segura. Por favor espera.' },
+        fr: { back: 'Retour', version: 'Version', gameDesc: 'Gratuit · Sûr et vérifié par Yami4Games.', downloadAndroid: 'Télécharger pour Android', downloadIos: 'Télécharger pour iOS', secure: 'Sécurisé', verified: 'Vérifié', fast: 'Téléchargement Rapide', statRating: 'Note', statSize: 'Taille', statPrice: 'Prix', redirecting: 'Préparation du téléchargement\u2026', redirectMsg: 'Vous êtes redirigé vers une page de téléchargement sécurisée. Veuillez patienter.' },
+        de: { back: 'Zurück', version: 'Version', gameDesc: 'Kostenlos · Sicher und verifiziert von Yami4Games.', downloadAndroid: 'Für Android herunterladen', downloadIos: 'Für iOS herunterladen', secure: 'Sicher', verified: 'Verifiziert', fast: 'Schneller Download', statRating: 'Bewertung', statSize: 'Größe', statPrice: 'Preis', redirecting: 'Herunterladen wird vorbereitet\u2026', redirectMsg: 'Sie werden zu einer sicheren Download-Seite weitergeleitet. Bitte warten.' }
+      };
+
+      function applyTranslations(lang) {
+        var t = translations[lang] || translations.en;
+        document.querySelectorAll('[data-i18n]').forEach(function (el) {
+          var key = el.getAttribute('data-i18n');
+          if (t[key] !== undefined) el.textContent = t[key];
+        });
+      }
+
+      function getCurrentSlideImgSrc() {
+        var s = document.querySelector('.slide[aria-hidden="false"] img');
+        return s ? s.src : '';
+      }
+
+      function extractSize(card) {
+        if (!card) return '\u2014';
+        var meta = card.querySelector('.meta-small');
+        if (!meta) return '\u2014';
+        var m = (meta.textContent || '').match(/[\d.,]+\s*(GB|MB|KB)/i);
+        return m ? m[0] : '\u2014';
+      }
+
+      function setHeroImage(src) {
+        var hero = document.getElementById('dpHeroBg');
+        if (!hero || !src) return;
+        hero.classList.remove('loaded');
+        hero.onload = function () { hero.classList.add('loaded'); };
+        hero.src = src;
+        if (hero.complete && hero.naturalWidth) hero.classList.add('loaded');
+      }
+
+      // Game-specific static avatar image map (no query strings; names must match data-name exactly)
+      var gameAvatarMap = {
+        'Gold and Glory': 'https://i.ytimg.com/vi/S9-wgzLLzaI/maxresdefault.jpg',
+        'No I\'m Not a Human': 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3180070/fadebc14211b17b5a6603926612ead9294cad9ce/header.jpg',
+        'Hollow Knight Silksong': 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1030300/7983574d464e6559ac7e24275727f73a8bcca1f3/header.jpg',
+        'GTA 5': 'https://www.adriancourreges.com/img/blog/2015/gtav/a/gtav_logo.jpg',
+        'Hollow Knight': 'https://assets.nintendo.com/image/upload/q_auto/f_auto/store/software/switch/70010000003208/4643fb058642335c523910f3a7910575f56372f612f7c0c9a497aaae978d3e51',
+        'Heartopia': 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/4025700/0d35710e88b5bb08ac54c92d6f242ed8040f6cc8/capsule_616x353.jpg',
+        'Cooking Mama': 'https://www.nintendo.com/eu/media/images/10_share_images/games_15/nintendo_3ds_25/H2x1_3DS_CookingMamaSweetShop.jpg',
+        'Roblox': 'https://images.rbxcdn.com/28ab48fcd5d5b19b03c126d2b6aef4b8.jpg',
+        'Valorant Mobile': 'https://sportsdigest.in/wp-content/uploads/2025/04/VALORANT-Mobile-How-To-Pre-Register-NOW.webp'
+      };
+
+      // Static version map per game
+      var gameVersionMap = {
+        'Valorant Mobile': '1.21.0',
+        'Hollow Knight Silksong': '1.0.29',
+        'Gold and Glory': '2.0',
+        'GTA 5': '2.0.5',
+        'Heartopia': '0.4.9',
+        'Cooking Mama': '1.125.0',
+        'No I\'m Not a Human': '2.3.4',
+        'Hollow Knight': '1.4.3.2',
+        'Roblox': '2.709.880'
+      };
+
+      function setAvatarBanner(name, role) {
+        var banner = document.getElementById('dpAvatarBanner');
+        var bannerImg = document.getElementById('dpAvatarBannerImg');
+        if (!banner || !bannerImg) return;
+
+        var avatarSrc = gameAvatarMap[name] || null;
+        var isGame = (role === 'game') && !!avatarSrc;
+
+        if (isGame) {
+          banner.classList.add('visible');
+          banner.removeAttribute('aria-hidden');
+          bannerImg.classList.remove('loaded');
+          bannerImg.onload = function () { bannerImg.classList.add('loaded'); };
+          bannerImg.src = avatarSrc;
+          bannerImg.alt = name;
+          if (bannerImg.complete && bannerImg.naturalWidth) bannerImg.classList.add('loaded');
+        } else {
+          banner.classList.remove('visible');
+          banner.setAttribute('aria-hidden', 'true');
+          bannerImg.src = '';
+          bannerImg.alt = '';
+          bannerImg.classList.remove('loaded');
+        }
+      }
+
+      function showDownloadPage(btn) {
+        var name = btn.getAttribute('data-name') || 'Game';
+        var role = btn.getAttribute('data-role') || 'game';
+        currentDownloadHref = btn.getAttribute('data-href') || null;
+
+        var card = btn.closest('article.card');
+        var iconImg = card ? card.querySelector('.icon img') : null;
+        var iconSrc = iconImg ? iconImg.src : '';
+
+        // Set game-specific avatar banner (games only)
+        setAvatarBanner(name, role);
+
+        // Set the game/app icon (logo)
+        var avatarImgEl = document.getElementById('dpAvatarImg');
+        if (avatarImgEl) { avatarImgEl.src = iconSrc; avatarImgEl.alt = name; }
+
+        document.getElementById('dpGameTitle').textContent = name;
+        // Use static version map; fall back to data-version attr or '1.0.0'
+        document.getElementById('dpVersionNum').textContent = gameVersionMap[name] || btn.getAttribute('data-version') || '1.0.0';
+
+        var sizeEl = document.getElementById('dpStatSize');
+        if (sizeEl) sizeEl.textContent = extractSize(card);
+
+        document.querySelector('.wrap').style.display = 'none';
+        var dpPage = document.getElementById('downloadPage');
+        dpPage.style.display = 'block';
+        dpPage.classList.add('visible');
+        // Toggle app-mode class for minimal layout on applications
+        dpPage.classList.toggle('dp-app-mode', role !== 'game');
+
+        applyTranslations(currentLang);
+        syncLangTrigger(currentLang);
+        window.scrollTo(0, 0);
+      }
+
+      function hideDownloadPage() {
+        var dpPage = document.getElementById('downloadPage');
+        dpPage.style.display = 'none';
+        dpPage.classList.remove('visible', 'dp-app-mode');
+        document.querySelector('.wrap').style.display = '';
+        currentDownloadHref = null;
+        closeLangDropdown();
+        // Reset avatar banner
+        var banner = document.getElementById('dpAvatarBanner');
+        var bannerImg = document.getElementById('dpAvatarBannerImg');
+        if (banner) { banner.classList.remove('visible'); banner.setAttribute('aria-hidden', 'true'); }
+        if (bannerImg) { bannerImg.src = ''; bannerImg.classList.remove('loaded'); }
+        window.scrollTo(0, 0);
+      }
+
+      function triggerRedirect(href) {
+        if (!href) return;
+        var overlay = document.getElementById('dpRedirectOverlay');
+        applyTranslations(currentLang);
+        overlay.classList.add('show');
+        setTimeout(function () {
+          window.location.assign(href);
+          setTimeout(function () { overlay.classList.remove('show'); }, 1500);
+        }, 1800);
+      }
+
+      document.getElementById('dpBackBtn').addEventListener('click', hideDownloadPage);
+
+      // ---- Dropdown language selector ----
+      var langWrap = document.getElementById('dpLangWrap');
+      var langTrigger = document.getElementById('dpLangTrigger');
+
+      function syncLangTrigger(lang) {
+        var opt = langWrap ? langWrap.querySelector('[data-lang="' + lang + '"]') : null;
+        var flagEl = document.getElementById('dpLangFlag');
+        var labelEl = document.getElementById('dpLangLabel');
+        if (flagEl) flagEl.textContent = opt ? opt.getAttribute('data-flag') : '\uD83C\uDDFA\uD83C\uDDF8';
+        if (labelEl) labelEl.textContent = opt ? opt.getAttribute('data-label') : 'English';
+        if (langWrap) {
+          langWrap.querySelectorAll('.dp-lang-option').forEach(function (b) {
+            var sel = b.getAttribute('data-lang') === lang;
+            b.classList.toggle('selected', sel);
+            b.setAttribute('aria-selected', sel ? 'true' : 'false');
+          });
+        }
+      }
+
+      function openLangDropdown() { if (langWrap) { langWrap.classList.add('open'); if (langTrigger) langTrigger.setAttribute('aria-expanded', 'true'); } }
+      function closeLangDropdown() { if (langWrap) { langWrap.classList.remove('open'); if (langTrigger) langTrigger.setAttribute('aria-expanded', 'false'); } }
+
+      if (langTrigger) langTrigger.addEventListener('click', function (e) { e.stopPropagation(); langWrap.classList.contains('open') ? closeLangDropdown() : openLangDropdown(); });
+
+      if (langWrap) {
+        langWrap.querySelectorAll('.dp-lang-option').forEach(function (opt) {
+          opt.addEventListener('click', function () {
+            currentLang = this.getAttribute('data-lang');
+            syncLangTrigger(currentLang);
+            closeLangDropdown();
+            applyTranslations(currentLang);
+          });
+        });
+      }
+
+      document.addEventListener('click', function (e) { if (langWrap && !langWrap.contains(e.target)) closeLangDropdown(); });
+
+      // Platform buttons
+      document.getElementById('dpAndroidBtn').addEventListener('click', function () { triggerRedirect(currentDownloadHref); });
+      document.getElementById('dpIosBtn').addEventListener('click', function () { triggerRedirect(currentDownloadHref); });
+
+      // Download handler — intercept and show download page instead of direct redirect
       document.addEventListener('click', function (e) {
         var btn = e.target.closest('button.download');
         if (!btn) return;
-        var href = btn.getAttribute('data-href') || null;
-        if (!href) {
-          try {
-            var tx = gatherData(btn);
-            var ev = new CustomEvent('yami-kb', { detail: tx, bubbles: true, cancelable: true });
-            window.dispatchEvent(ev);
-          } catch (err) { /* silent */ }
-          return;
-        }
         e.preventDefault();
+        e.stopPropagation();
         try {
           var data = gatherData(btn);
           var ev = new CustomEvent('yami-kb', { detail: data, bubbles: true, cancelable: true });
           window.dispatchEvent(ev);
         } catch (err) { /* silent */ }
-        window.location.assign(href);
+        showDownloadPage(btn);
       }, { capture: true });
 
       window._KB = function (el) {
